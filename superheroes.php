@@ -1,5 +1,8 @@
 <?php
 
+header("Content-Type: text/html; charset=UTF-8");
+
+// sir code starting
 $superheroes = [
   [
       "id" => 1,
@@ -62,11 +65,43 @@ $superheroes = [
       "biography" => "Notably powerful, Wanda Maximoff has fought both against and with the Avengers, attempting to hone her abilities and do what she believes is right to help the world.",
   ], 
 ];
+// sir array ending 
+
+$query = "";
+if (isset($_GET["query"])) {
+    $query = htmlspecialchars(trim($_GET["query"]));
+}
+
+if ($query === "") {
+    echo "<ul>";
+    foreach ($superheroes as $superhero) {
+        echo "<li>{$superhero['alias']}</li>";
+    }
+    echo "</ul>";
+    exit;
+}
+
+$found = null;
+foreach ($superheroes as $superhero) {
+    if (strcasecmp($superhero["alias"], $query) === 0 || strcasecmp($superhero["name"], $query) === 0) {
+        $found = $superhero;
+        break;
+    }
+}
+
+if ($found) {
+    $aliasUpper = strtoupper($found['alias']);
+    $nameUpper = strtoupper($found['name']);
+
+    echo "<h3>{$aliasUpper}</h3>";
+    echo "<h4>A.K.A {$nameUpper}</h4>";
+    echo "<p>{$found['biography']}</p>";
+}
+else {
+    echo "<p class='not-found'>SUPERHERO NOT FOUND</p>";
+}
 
 ?>
 
-<ul>
-<?php foreach ($superheroes as $superhero): ?>
-  <li><?= $superhero['alias']; ?></li>
-<?php endforeach; ?>
-</ul>
+
+
